@@ -18,7 +18,11 @@ public class UserController {
     @PostMapping
     public String createUser(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email must not be null or empty");
+        }
         service.createUser(email);
         return "User created";
     }
+
 }
