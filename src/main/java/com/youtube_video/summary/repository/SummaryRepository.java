@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class SummaryRepository {
             if (!ids.isEmpty()) {
                 return ids.get(0);
             }
+
 
             jdbcTemplate.update("INSERT INTO users (email) VALUES (?)", email);
 
@@ -55,10 +58,10 @@ public class SummaryRepository {
 
     public void save(Summary summary, String userEmail) {
         int userId = getOrCreateUserId(userEmail);
-
+        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         jdbcTemplate.update(
-                "INSERT INTO summary (user_id, video_url, video_title, summary) VALUES (?, ?, ?, ?)",
-                userId, summary.getVideoUrl(), summary.getVideoTitle(), summary.getSummary()
+                "INSERT INTO summary (user_id, video_url, video_title, summary,created_at) VALUES (?, ?, ?, ?,?)",
+                userId, summary.getVideoUrl(), summary.getVideoTitle(), summary.getSummary(),createdAt
         );
     }
 
