@@ -30,7 +30,13 @@ public class SummaryService {
     }
 
     public void createUser(String email) {
-        // Force-create user (will skip if already present due to getOrCreateUserId logic)
-        repository.getOrCreateUserId(email);
+        try {
+            repository.getOrCreateUserId(email);
+        } catch (Exception e) {
+            System.err.println("Failed to create user: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create user", e);
+        }
     }
+
 }

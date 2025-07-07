@@ -16,24 +16,31 @@ public class SummaryRepository {
 
     // Fetch user_id using email or create user if not exists
     public int getOrCreateUserId(String email) {
-        List<Integer> ids = jdbcTemplate.query(
-                "SELECT id FROM users WHERE email = ?",
-                (rs, rowNum) -> rs.getInt("id"),
-                email
-        );
+        try {
+            List<Integer> ids = jdbcTemplate.query(
+                    "SELECT id FROM users WHERE email = ?",
+                    (rs, rowNum) -> rs.getInt("id"),
+                    email
+            );
 
-        if (!ids.isEmpty()) {
-            return ids.get(0);
+            if (!ids.isEmpty()) {
+                return ids.get(0);
+            }
+
+            jdbcTemplate.update("INSERT INTO users (email) VALUES (?)", email);
+
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM users WHERE email = ?",
+                    Integer.class,
+                    email
+            );
+        } catch (Exception e) {
+            System.err.println("❌ Error in getOrCreateUserId(): " + e.getMessage());
+            e.printStackTrace(); // ✅ prints full stack trace
+            throw new RuntimeException("Failed to get or create user ID", e);
         }
-
-        jdbcTemplate.update("INSERT INTO users (email) VALUES (?)", email);
-
-        return jdbcTemplate.queryForObject(
-                "SELECT id FROM users WHERE email = ?",
-                Integer.class,
-                email
-        );
     }
+
 
     private final RowMapper<Summary> rowMapper = (rs, rowNum) -> {
         Summary s = new Summary();
