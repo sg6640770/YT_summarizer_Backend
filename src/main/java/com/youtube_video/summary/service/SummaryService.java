@@ -14,9 +14,11 @@ public class SummaryService {
     private SummaryRepository repository;
 
     public void saveSummary(Summary summary) {
-        int userId = repository.getOrCreateUserId(summary.getUserEmail());
-        summary.setUserId(userId);
-        repository.save(summary, summary.getUserEmail()); // ✅ fix: pass email too
+        if (summary.getUserEmail() == null || summary.getUserEmail().isEmpty()) {
+            throw new IllegalArgumentException("userEmail must not be null or empty");
+        }
+
+        repository.save(summary, summary.getUserEmail());
     }
 
     public List<Summary> getSummariesByEmail(String email) {
@@ -25,5 +27,10 @@ public class SummaryService {
             return List.of(); // return empty list if user not found
         }
         return repository.findByUserId(userId);
+    }
+
+    public void createUser(String email) {
+        // Force-create user (will skip if already present due to getOrCreateUserId logic)
+        repository.getOrCreateUserId(email);
     }
 }
