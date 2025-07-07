@@ -15,9 +15,10 @@ public class SummaryController {
     @Autowired
     private SummaryService service;
 
-    @PostMapping("/users")
+    @PostMapping()
     public String save(@RequestBody Summary summary) {
         // summary object must contain userEmail (sent from frontend)
+        System.out.println("Received summary for user: " + summary.getUserEmail());
         service.saveSummary(summary);
         return "Summary saved successfully";
     }
