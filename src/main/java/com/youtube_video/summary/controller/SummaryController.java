@@ -15,7 +15,7 @@ public class SummaryController {
     @Autowired
     private SummaryService service;
 
-    @PostMapping
+    @PostMapping("/users")
     public String save(@RequestBody Summary summary) {
         // summary object must contain userEmail (sent from frontend)
         service.saveSummary(summary);
