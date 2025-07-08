@@ -52,8 +52,22 @@ public class SummaryRepository {
         s.setVideoUrl(rs.getString("video_url"));
         s.setVideoTitle(rs.getString("video_title"));
         s.setSummary(rs.getString("summary"));
-        s.setVideoThumbnail(rs.getString("video_thumbnail")); // 👈 Add this
+        s.setVideoThumbnail(rs.getString("video_thumbnail"));
         s.setCreatedAt(rs.getString("created_at"));
+
+        // Fetch user email manually (optional)
+        try {
+            int userId = rs.getInt("user_id");
+            String email = jdbcTemplate.queryForObject(
+                    "SELECT email FROM users WHERE id = ?",
+                    String.class,
+                    userId
+            );
+            s.setUserEmail(email);
+        } catch (Exception e) {
+            // leave email blank if not found
+        }
+
         return s;
     };
 
@@ -76,14 +90,26 @@ public class SummaryRepository {
 
     public List<Summary> findByUser(String email) {
         String sql = """
-            SELECT s.* FROM summary s
-            JOIN users u ON s.user_id = u.id
-            WHERE u.email = ?
-            ORDER BY s.created_at DESC
-        """;
+        SELECT s.*, u.email AS user_email FROM summary s
+        JOIN users u ON s.user_id = u.id
+        WHERE u.email = ?
+        ORDER BY s.created_at DESC
+    """;
 
-        return jdbcTemplate.query(sql, rowMapper, email);
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Summary s = new Summary();
+            s.setId(rs.getInt("id"));
+            s.setUserId(rs.getInt("user_id"));
+            s.setVideoUrl(rs.getString("video_url"));
+            s.setVideoTitle(rs.getString("video_title"));
+            s.setSummary(rs.getString("summary"));
+            s.setVideoThumbnail(rs.getString("video_thumbnail"));
+            s.setCreatedAt(rs.getString("created_at"));
+            s.setUserEmail(rs.getString("user_email")); // ✅ populated correctly now
+            return s;
+        }, email);
     }
+
 
     public List<Summary> findByUserId(int userId) {
         return jdbcTemplate.query(
