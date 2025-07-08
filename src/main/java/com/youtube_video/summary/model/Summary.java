@@ -8,6 +8,8 @@ public class Summary {
     private String summary;
     private String createdAt;
     private String userEmail;
+    private String videoThumbnail;
+
 
     public int getId() {
         return id;
@@ -63,5 +65,12 @@ public class Summary {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+    public String getVideoThumbnail() {
+        return videoThumbnail;
+    }
+
+    public void setVideoThumbnail(String videoThumbnail) {
+        this.videoThumbnail = videoThumbnail;
     }
 }
