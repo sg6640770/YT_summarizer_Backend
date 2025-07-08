@@ -52,18 +52,27 @@ public class SummaryRepository {
         s.setVideoUrl(rs.getString("video_url"));
         s.setVideoTitle(rs.getString("video_title"));
         s.setSummary(rs.getString("summary"));
+        s.setVideoThumbnail(rs.getString("video_thumbnail")); // 👈 Add this
         s.setCreatedAt(rs.getString("created_at"));
         return s;
     };
 
+
     public void save(Summary summary, String userEmail) {
         int userId = getOrCreateUserId(userEmail);
         String createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
         jdbcTemplate.update(
-                "INSERT INTO summary (user_id, video_url, video_title, summary,created_at) VALUES (?, ?, ?, ?,?)",
-                userId, summary.getVideoUrl(), summary.getVideoTitle(), summary.getSummary(),createdAt
+                "INSERT INTO summary (user_id, video_url, video_title, summary, video_thumbnail, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                userId,
+                summary.getVideoUrl(),
+                summary.getVideoTitle(),
+                summary.getSummary(),
+                summary.getVideoThumbnail(), // 👍 new addition
+                createdAt
         );
     }
+
 
     public List<Summary> findByUser(String email) {
         String sql = """
