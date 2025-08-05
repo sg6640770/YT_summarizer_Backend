@@ -1,21 +1,29 @@
 package com.youtube_video.summary.dao;
 
 import com.youtube_video.summary.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jakarta.annotation.PostConstruct;
+
+import javax.sql.DataSource;
 import java.sql.*;
 
 @Repository
 public class UserDao {
-    private final Connection connection;
 
-    public UserDao() throws SQLException {
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/youtube_summary_db",
-                "root",
-                "12#@12Ab"
-        );
-        System.out.println("✅ Connected to the database.");
+    private final DataSource dataSource;
+    private Connection connection;
+
+    @Autowired
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    public void init() throws SQLException {
+        this.connection = dataSource.getConnection();
+        System.out.println("✅ Connected to the database via DataSource.");
     }
 
     public void save(User user) throws SQLException {
