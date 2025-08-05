@@ -24,7 +24,9 @@ public class SummaryController {
     }
 
     @GetMapping("/{email}")
-    public List<Summary> getByUser(@PathVariable String email) {
+    public List<Summary> getSummariesByEmail(@PathVariable String email) {
         return service.getSummariesByEmail(email);
     }
+
+
 }

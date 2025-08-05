@@ -21,12 +21,9 @@ public class SummaryService {
         repository.save(summary, summary.getUserEmail());
     }
 
+    // FIXED: Use email directly to fetch summaries
     public List<Summary> getSummariesByEmail(String email) {
-        int userId = repository.findUserIdByEmail(email);
-        if (userId == -1) {
-            return List.of(); // return empty list if user not found
-        }
-        return repository.findByUserId(userId);
+        return repository.findByUser(email);
     }
 
     public void createUser(String email) {
@@ -38,5 +35,4 @@ public class SummaryService {
             throw new RuntimeException("Failed to create user", e);
         }
     }
-
 }
