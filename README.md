@@ -1,55 +1,207 @@
-📽️ YouTube Video Summarizer — Full Stack AI App
-A full-stack application that allows authenticated users to input a YouTube video URL and receive a structured, AI-generated summary. This project leverages modern frontend frameworks, backend APIs, workflow automation, and AI models.
+🎥 YouTube Video Summarizer
 
-🚀 Tech Stack Overview
-🖥️ Frontend — Built with Next.js + React
-Technology	Description
-Next.js	React framework with built-in routing, SSR, and API routes.
-React	Component-based JavaScript library for building dynamic UIs.
-Tailwind CSS	Utility-first CSS framework for rapid, responsive UI design.
-TypeScript	Superset of JavaScript that provides static typing.
-Lucide Icons	Open-source icon set used for visual feedback (e.g., loaders).
-@nhost/nextjs	Auth hook integration with Nhost for user session and identity management.
+Next.js • Spring Boot • JDBC • MySQL • n8n • NLP • TTS
 
-⚙️ Backend — Summary Storage & Auth Integration
-Technology	Description
-Spring Boot	Java-based framework for building RESTful backend services.
-REST API	Exposes /api/summaries endpoint to store video summaries per user.
-JDBC	Java Database Connectivity used for executing SQL queries.
-MySQL	Relational database for persisting summary history (linked with user email).
+A full-stack AI-powered web app that summarizes YouTube videos using an automated n8n workflow. Users can paste a YouTube URL, generate summaries instantly, store and view their history, and even convert summaries to speech.
 
-🤖 AI Summarization — Powered by n8n + OpenAI GPT
-Technology	Description
-n8n	Low-code automation tool that orchestrates the summary flow.
-Webhook Node	Receives video URL from frontend as a POST request.
-Custom Code Node	Extracts YouTube Video ID and cleans the transcript.
-youtube-transcript.io	External API that fetches transcript from YouTube using video ID.
-LangChain + GPT-4o	OpenAI GPT-4o model (via LangChain) generates markdown-based structured summaries.
+🚀 Features
+🔹 AI / Automation
 
-🔐 Authentication — Using Nhost
-Technology	Description
-Nhost	Backend-as-a-Service offering GraphQL, Auth, and Postgres.
-JWT Token Auth	Secures API calls from frontend and identifies the logged-in user.
+Auto-summarizes YouTube videos via an n8n NLP pipeline
 
-🌐 Integration Utilities
-Tool/Library	Purpose
-fetch API	Performs HTTP requests from frontend to backend/n8n.
-.env Variables	Secures environment-specific configuration like API URLs, Nhost keys, etc.
+Asynchronous, scalable workflow
 
-🧠 How It Works
-User logs in using Nhost authentication.
+Supports long transcripts and multi-step processing
 
-User submits a YouTube URL from the frontend.
+🔹 Frontend (Next.js)
 
-URL is sent to an n8n workflow, which:
+Clean, modern UI with Tailwind CSS
 
-Extracts video ID.
+Dark Mode support
 
-Gets the transcript via API.
+Slider-based UI previews
 
-Uses GPT-4o to summarize it.
+Copy summary, export options
 
-Summary is sent back to the frontend.
+Responsive design
 
-Summary is stored in your Spring Boot + MySQL backend for authenticated users.
+🔹 Backend (Java + Spring Boot)
 
+REST APIs for summarization, history, and pagination
+
+JDBC-based service layer
+
+Error-handling + validation
+
+🔹 Database (MySQL)
+
+Normalized schema
+
+Fast retrieval using indexing
+
+Supports 1,000+ summaries per user
+
+User-specific data isolation
+
+🔹 Extras
+
+Text-to-Speech (TTS)
+
+Multi-language voice support
+
+Adjustable playback speed
+
+🛠️ Tech Stack
+Frontend
+
+Next.js
+
+Tailwind CSS
+
+Axios
+
+React Query
+
+Backend
+
+Java
+
+Spring Boot
+
+JDBC
+
+REST APIs
+
+Database
+
+MySQL
+
+Normalized relational schema
+
+Automation
+
+n8n
+
+NLP (AI model via API)
+
+🧩 System Architecture
+YouTube URL → Next.js UI → Spring Boot API → n8n Workflow → NLP Model
+          ↑                 ↓                        ↓
+     User history ← MySQL DB ← Summary & Metadata ← Transcript
+
+📂 Repository Links
+Frontend:
+
+🔗 https://github.com/sg6640770/YT_summarizer_Frontend
+
+Backend:
+
+🔗 https://github.com/sg6640770/YT_summarizer_Backend
+
+📦 Installation & Setup
+1️⃣ Clone the repositories
+git clone https://github.com/sg6640770/YT_summarizer_Frontend
+git clone https://github.com/sg6640770/YT_summarizer_Backend
+
+🖥️ Frontend Setup (Next.js)
+cd YT_summarizer_Frontend
+npm install
+npm run dev
+
+
+Create .env.local:
+
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+
+⚙️ Backend Setup (Java Spring Boot)
+cd YT_summarizer_Backend
+mvn clean install
+mvn spring-boot:run
+
+
+Create application.properties:
+
+spring.datasource.url=jdbc:mysql://localhost:3306/youtube_summarizer
+spring.datasource.username=YOUR_USERNAME
+spring.datasource.password=YOUR_PASSWORD
+n8n.webhook.url=YOUR_N8N_WEBHOOK_URL
+
+🗄️ MySQL Schema
+
+Key tables:
+
+users (user_id, email, password_hash)
+summaries (id, user_id, video_id, title, summary, created_at)
+
+
+✔ Normalized
+✔ Indexed columns for fast pagination
+✔ Foreign keys for referential integrity
+
+🤖 n8n Workflow (High-Level)
+
+Webhook Trigger receives YouTube link
+
+Extract Video ID
+
+Fetch YouTube transcript
+
+Send transcript to NLP Model (AI)
+
+Generate summarized result
+
+Return structured JSON to backend
+
+Backend stores summary in MySQL
+
+Frontend updates user history
+
+🎤 Text-to-Speech Feature
+
+Supports multiple languages
+
+Adjustable playback speed
+
+Auto-generates audio from summary
+
+Built with Web Speech API / TTS engine
+
+🧪 API Endpoints (Backend)
+Method	Endpoint	Description
+POST	/api/summarize	Trigger summary for YouTube URL
+GET	/api/history/{userId}	Get paginated history
+GET	/api/summary/{id}	Get specific summary
+DELETE	/api/summary/{id}	Delete a summary
+📸 Screenshots (Add your images here)
+/public/screenshots/home.png  
+/public/screenshots/summary.png  
+/public/screenshots/history.png  
+/public/screenshots/tts.png  
+
+
+Example placeholder:
+
+🚀 Future Enhancements
+
+OAuth login
+
+Export summaries as PDF
+
+AI-powered keyword extraction
+
+Multi-video batch processing
+
+Chrome Extension
+
+🏁 Conclusion
+
+This project helped me strengthen:
+
+✔ Full-stack architecture
+✔ Database normalization
+✔ AI workflow automation
+✔ Next.js UI/UX
+✔ Spring Boot API development
+✔ MySQL indexing & optimization
+
+If you have feedback or ideas to improve the system, feel free to connect!
