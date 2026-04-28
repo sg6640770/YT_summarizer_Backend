@@ -10,5 +10,3 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-RUN jar tf /app/target/demo-0.0.1-SNAPSHOT.jar | grep MailConfig
