@@ -19,7 +19,7 @@ public class AuthController {
     public ResponseEntity<?> signup(@RequestBody AuthRequest request) {
         try {
             authService.register(request.getEmail(), request.getPassword());
-            return ResponseEntity.ok("Verification email sent.");
+            return ResponseEntity.ok("Account created successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Signup failed: " + e.getMessage());
         }

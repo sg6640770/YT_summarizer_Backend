@@ -27,7 +27,7 @@ public class UserDao {
     }
 
     public void save(User user) throws SQLException {
-        String sql = "INSERT INTO users (email, password, verification_token, verified) VALUES (?, ?, ?, false)";
+        String sql = "INSERT INTO users (email, password, verification_token, verified) VALUES (?, ?, ?, true)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             System.out.println("📝 Inserting user...");
             System.out.println("📧 Email: " + user.getEmail());

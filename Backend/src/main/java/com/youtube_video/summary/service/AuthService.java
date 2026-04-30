@@ -38,11 +38,10 @@ public class AuthService {
         User user = new User();
         user.setEmail(email);
         user.setPassword(hashedPassword);
-        user.setVerified(false);
-        user.setVerificationToken(token);
+        user.setVerified(true);
+        user.setVerificationToken(null);
 
         userDao.save(user);
-        sendVerificationEmail(email, token);
     }
 
     // VERIFICATION: Match token and mark user as verified
@@ -77,7 +76,7 @@ public class AuthService {
 
     // EMAIL: Send verification email
     private void sendVerificationEmail(String to, String token) {
-        String verificationUrl = "http://localhost:8080/verify?token=" + token;
+        String verificationUrl = "https://elegant-liberation-production-da93.up.railway.app/verify?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
